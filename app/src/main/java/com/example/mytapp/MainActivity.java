@@ -1,5 +1,6 @@
 package com.example.mytapp;
 
+import android.content.pm.ActivityInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -18,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int CAMERA_REQUEST = 100;
     //private static final int STORAGE_PERMISSION_CODE = 1;
-    public static Bitmap bitmap;
+    public static Bitmap bitmapGallery;
     private int PICK_IMAGE_REQUEST = 1;
     Button btnCamera;
     Button btnGallery;
@@ -27,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         btnCamera = findViewById(R.id.buttonCam);
         btnGallery = findViewById(R.id.buttonGallery);
@@ -68,12 +70,6 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra("image", thumbnail);
             startActivity(intent);
 
-            /*// CALL THIS METHOD TO GET THE URI FROM THE BITMAP
-            Uri tempUri = getImageUri(getApplicationContext(), thumbnail);
-
-            // CALL THIS METHOD TO GET THE ACTUAL PATH
-            File finalFile = new File(getRealPathFromURI(tempUri));*/
-
         }
 
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
@@ -82,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
 
             try {
                 //Getting the Bitmap from Gallery
-                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+                bitmapGallery = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
                 startActivity(new Intent(MainActivity.this, SecondActivity.class));
             } catch (IOException e) {
                 e.printStackTrace();

@@ -1,5 +1,6 @@
 package com.example.mytapp;
 
+import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -32,11 +33,9 @@ import java.util.List;
 public class SecondActivity extends AppCompatActivity {
 
     ImageView imageView;
-    Button btn2;
-    Button btn3;
     TextView tv;
     private File photo;
-    Bitmap bitmap;
+    Bitmap bitmapGallery;
     Bitmap imageCam;
     private GraphicOverlay mGraphicOverlay;
     // Max width (portrait mode)
@@ -53,6 +52,7 @@ public class SecondActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.second_activity);
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -65,41 +65,24 @@ public class SecondActivity extends AppCompatActivity {
         mGraphicOverlay = findViewById(R.id.graphic_overlay);
         imageView = findViewById(R.id.imageView);
 
-        bitmap = MainActivity.bitmap;
-        //getScaledBitmap(, 360, 360);
-        imageView.setImageBitmap(bitmap);
-
+        if (MainActivity.bitmapGallery != null) {
+            bitmapGallery = MainActivity.bitmapGallery;
+            imageView.setImageBitmap(bitmapGallery);
+            runTextRecognitionGallery();
+        }
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             imageCam = (Bitmap) extras.get("image");
             if (imageCam != null) {
                 imageView.setImageBitmap(imageCam);
+                runTextRecognitionCam();
             }
         }
 
 
         tv = findViewById(R.id.textView);
-        btn2 = findViewById(R.id.button2);
-        btn3 = findViewById(R.id.button3);
 
-        //photo = getPhotoFile();
-
-
-        btn2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                runTextRecognitionCam();
-
-            }
-        });
-        btn3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                runTextRecognitionGallery();
-
-            }
-        });
 
     }
 
@@ -107,15 +90,13 @@ public class SecondActivity extends AppCompatActivity {
         if (imageView.getDrawable() != null) {
             FirebaseVisionImage imageCamera = FirebaseVisionImage.fromBitmap(imageCam);
             FirebaseVisionTextRecognizer recognizerCamera = FirebaseVision.getInstance().getOnDeviceTextRecognizer();
-            btn2.setEnabled(false);
+            //btn2.setEnabled(false);
             recognizerCamera.processImage(imageCamera)
                     .addOnSuccessListener(
                             new OnSuccessListener<FirebaseVisionText>() {
                                 @Override
                                 public void onSuccess(FirebaseVisionText texts) {
-                                    btn2.setEnabled(true);
                                     processTextRecognitionResult(texts);
-                                    btn3.setEnabled(false);
                                 }
                             })
                     .addOnFailureListener(
@@ -123,7 +104,6 @@ public class SecondActivity extends AppCompatActivity {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
                                     // Task failed with an exception
-                                    btn2.setEnabled(true);
                                     e.printStackTrace();
                                 }
                             });
@@ -132,16 +112,15 @@ public class SecondActivity extends AppCompatActivity {
 
     private void runTextRecognitionGallery() {
 
-        FirebaseVisionImage imageGallery = FirebaseVisionImage.fromBitmap(bitmap);
+        FirebaseVisionImage imageGallery = FirebaseVisionImage.fromBitmap(bitmapGallery);
         FirebaseVisionTextRecognizer recognizerGallery = FirebaseVision.getInstance().getOnDeviceTextRecognizer();
         recognizerGallery.processImage(imageGallery)
                 .addOnSuccessListener(
                         new OnSuccessListener<FirebaseVisionText>() {
                             @Override
                             public void onSuccess(FirebaseVisionText texts) {
-                                btn3.setEnabled(true);
                                 processTextRecognitionResult(texts);
-                                btn2.setEnabled(false);
+
                             }
                         })
                 .addOnFailureListener(
@@ -149,7 +128,6 @@ public class SecondActivity extends AppCompatActivity {
                             @Override
                             public void onFailure(@NonNull Exception e) {
                                 // Task failed with an exception
-                                btn3.setEnabled(true);
                                 e.printStackTrace();
                             }
                         });
@@ -178,10 +156,6 @@ public class SecondActivity extends AppCompatActivity {
 
     private void showToast(String message) {
         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-    }
-
-    private String getPhotoName(){
-        return "IMG_" + SystemClock.currentThreadTimeMillis() + ".jpg";
     }
 
 
