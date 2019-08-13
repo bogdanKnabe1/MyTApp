@@ -2,11 +2,16 @@ package com.example.mytapp;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -19,6 +24,7 @@ import com.google.firebase.ml.vision.FirebaseVision;
 import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 import com.google.firebase.ml.vision.text.FirebaseVisionText;
 import com.google.firebase.ml.vision.text.FirebaseVisionTextRecognizer;
+import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
 import java.io.File;
 import java.util.List;
@@ -38,6 +44,7 @@ public class SecondActivity extends AppCompatActivity {
     // Max height (portrait mode)
     private Integer mImageMaxHeight;
     Uri uri;
+    MaterialSearchView searchView;
 
 
     private String KEY_IMAGE = "image";
@@ -46,6 +53,13 @@ public class SecondActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.second_activity);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Search");
+        toolbar.setTitleTextColor(Color.parseColor("#FFFFFF"));
+
+        searchView = findViewById(R.id.search_view);
 
 
         mGraphicOverlay = findViewById(R.id.graphic_overlay);
@@ -66,7 +80,6 @@ public class SecondActivity extends AppCompatActivity {
 
 
         tv = findViewById(R.id.textView);
-        //btn1 = findViewById(R.id.button);
         btn2 = findViewById(R.id.button2);
         btn3 = findViewById(R.id.button3);
 
@@ -194,6 +207,13 @@ public class SecondActivity extends AppCompatActivity {
         return BitmapFactory.decodeFile(path, options);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_item, menu);
+        MenuItem item = menu.findItem(R.id.action_search);
+        searchView.setMenuItem(item);
+        return true;
+    }
 
     /*private Bitmap getScaledBitmap(String path){
         Point size = new Point();

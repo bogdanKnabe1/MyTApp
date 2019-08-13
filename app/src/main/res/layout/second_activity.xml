@@ -1,10 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        app:layout_constraintTop_toTopOf="@+id/textView">
+
+    </android.support.v7.widget.Toolbar>
+
+    <com.miguelcatalan.materialsearchview.MaterialSearchView
+        android:id="@+id/search_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:searchBackground="@color/colorPrimary"
+        app:searchCloseIcon="@drawable/ic_action_navigation_close_inverted"
+        app:searchSuggestionBackground="@color/colorPrimary"
+        app:searchBackIcon="@drawable/ic_action_navigation_arrow_back_inverted"
+        app:searchSuggestionIcon="@drawable/ic_suggestion"
+        android:textColor="#FFF"/>
 
     <ImageView
         android:id="@+id/imageView"
@@ -15,28 +35,25 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.498"
+        android:layout_margin="10dp"
+        android:layout_below="@+id/toolbar"
         app:srcCompat="@android:drawable/sym_def_app_icon" />
 
 
     <com.example.mytapp.GraphicOverlay
         android:id="@+id/graphic_overlay"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintTop_toTopOf="@id/imageView"
-        app:layout_constraintBottom_toBottomOf="@id/imageView"
-        app:layout_constraintLeft_toLeftOf="@id/imageView"
-        app:layout_constraintRight_toRightOf="@id/imageView"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_below="@+id/toolbar"
         android:layout_alignParentStart="true" />
 
     <Button
         android:id="@+id/button2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar"
+        android:layout_marginTop="450dp"
         android:layout_marginStart="40dp"
         android:layout_marginBottom="8dp"
         android:text="GET TEXT"
@@ -47,14 +64,13 @@
         android:id="@+id/button3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_below="@+id/toolbar"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="450dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:text="GET FROM Gallery"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.72"
-        app:layout_constraintStart_toEndOf="@+id/button2" />
+        android:layout_toRightOf="@+id/button2"
+        android:text="GET FROM Gallery" />
 
     <TextView
         android:id="@+id/textView"
@@ -72,4 +88,4 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 
-</android.support.constraint.ConstraintLayout>
+</RelativeLayout>
